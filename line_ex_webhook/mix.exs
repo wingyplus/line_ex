@@ -13,14 +13,15 @@ defmodule LineEx.Webhook.MixProject do
 
   def application do
     [
-      extra_applications: [:logger, :inets]
+      extra_applications: [:crypto, :inets, :logger]
     ]
   end
 
   defp deps do
     [
       {:jason, "~> 1.2"},
-      {:certifi, "~> 2.7"}
+      {:certifi, "~> 2.7"},
+      {:plug, "~> 1.0"}
     ]
   end
 end

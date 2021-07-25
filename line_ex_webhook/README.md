@@ -8,13 +8,12 @@ will act as a process and send events to a module that implements behaviour.
 
 ## Installation
 
-Adding 2 dependencies to your project:
+You needs to add dependency to your project:
 
 ```elixir
 def deps do
   [
     {:line_ex_webhook, "~> 0.1.0", github: "github.com/wingyplus/line_ex", sparse: "line_ex_webhook"},
-    {:line_ex_webhook_plug, "~> 0.1.0", github: "github.com/wingyplus/line_ex", sparse: "line_ex_webhook_plug"}
   ]
 end
 ```
