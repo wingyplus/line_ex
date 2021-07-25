@@ -59,11 +59,22 @@ defmodule LineEx.Webhook do
 
   ## Client
 
+  @doc """
+  Starting a `LineEx.Webhook` process.
+
+  Once the process started, the `init/1` function of the given `module` is called with
+  `args`.
+  """
+  @spec start_link(module(), term(), GenServer.options()) :: GenServer.on_start()
   def start_link(module, args, opts \\ []) when is_atom(module) and is_list(opts) do
     webhook_args = args |> Keyword.put(:mod, module) |> Keyword.put(:init_args, args)
     GenServer.start_link(__MODULE__, webhook_args, opts)
   end
 
+  @doc """
+  Handling an `event`. The `event` will process asynchronously.
+  """
+  @spec handle_event(GenServer.server(), webhook_event()) :: :ok
   def handle_event(webhook, event) do
     GenServer.cast(webhook, {:"$webhook_event", event})
   end
