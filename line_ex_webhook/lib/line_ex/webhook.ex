@@ -41,6 +41,15 @@ defmodule LineEx.Webhook do
               {:reply, reply_token, [message], new_state} | {:noreply, new_state}
             when reply_token: String.t(), message: map(), state: term(), new_state: term()
 
+  @type t() :: %__MODULE__{
+          mod: module(),
+          state: term(),
+          channel_access_token: String.t(),
+          # TODO: implements behaviour.
+          http_client: term(),
+          line_api_url: String.t()
+        }
+
   defstruct [
     :mod,
     :state,
