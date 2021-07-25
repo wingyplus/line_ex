@@ -41,6 +41,14 @@ defmodule LineEx.Webhook do
               {:reply, reply_token, [message], new_state} | {:noreply, new_state}
             when reply_token: String.t(), message: map(), state: term(), new_state: term()
 
+  defstruct [
+    :mod,
+    :state,
+    :channel_access_token,
+    :http_client,
+    :line_api_url
+  ]
+
   ## Client
 
   def start_link(module, args, opts \\ []) when is_atom(module) and is_list(opts) do
@@ -62,12 +70,12 @@ defmodule LineEx.Webhook do
     case mod.init(opts[:init_args]) do
       {:ok, state} ->
         {:ok,
-         %{
+         %__MODULE__{
            mod: mod,
            state: state,
            channel_access_token: opts[:channel_access_token],
            http_client: opts[:http_client] || LineEx.Webhook.HttpcClient,
-           line_api_url: "https://api.line.me"
+           line_api_url: opts[:line_api_url] || "https://api.line.me"
          }}
 
       {:stop, reason} ->
