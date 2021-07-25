@@ -1,21 +1,20 @@
 # LineEx.Webhook
 
-**TODO: Add description**
+**NOTE:** The library is under development. It can have breaking changes during develop. Please
+use with cautions.
+
+`LineEx.Webhook` is a process to handle incoming webhook from LINE messaging api. The module
+will act as a process and send events to a module that implements behaviour.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `line_ex_webhook` to your list of dependencies in `mix.exs`:
+Adding 2 dependencies to your project:
 
 ```elixir
 def deps do
   [
-    {:line_ex_webhook, "~> 0.1.0"}
+    {:line_ex_webhook, "~> 0.1.0", github: "github.com/wingyplus/line_ex", sparse: "line_ex_webhook"},
+    {:line_ex_webhook_plug, "~> 0.1.0", github: "github.com/wingyplus/line_ex", sparse: "line_ex_webhook_plug"}
   ]
 end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/line_ex_webhook](https://hexdocs.pm/line_ex_webhook).
-
