@@ -45,8 +45,7 @@ defmodule LineEx.Webhook do
           mod: module(),
           state: term(),
           channel_access_token: String.t(),
-          # TODO: implements behaviour.
-          http_client: term(),
+          http_client: LineEx.Webhook.HttpClient,
           line_api_url: String.t()
         }
 
