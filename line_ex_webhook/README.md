@@ -3,8 +3,15 @@
 **NOTE:** The library is under development. It can have breaking changes during develop. Please
 use with cautions.
 
-`LineEx.Webhook` is a process to handle incoming webhook from LINE messaging api. The module
-will act as a process and send events to a module that implements behaviour.
+`LineEx.Webhook` provides mechanism to handle webhook event, such as verify signature, reply the message.
+
+## Main goal
+
+* Provides mechanism to verify request before entering webhook. User don't to handle on 
+  their own.
+* Provides user-friendly api to write webhook event handler. User don't need to worry about
+  how they reply.
+* Run it under supervisor. It'll restart automatically if it crash. (Thanks to Erlang/OTP).
 
 ## Installation
 

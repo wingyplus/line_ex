@@ -3,14 +3,8 @@
 **NOTE:** The library is under development. It can have breaking changes during develop. Please
 use with cautions.
 
-LineEx is a library to interact with LINE APIs ecosystems. Currently, it provides:
+LineEx is a library to interact with LINE APIs ecosystems. This project provides:
 
-* `line_ex_webhook` - it's behaviour and process for handle incoming webhook.
-* `line_ex_webhook_plug` - a plug module to handle webhook via HTTP.
+* `line_ex_webhook` - A behaviour to handling webhook event via HTTP.
 
-## TODO
-
-- [ ] Ports examples from LINE official repository to the `example/`.
-- [ ] Write tests.
-- [ ] Update documentation. Write the usage.
-- [ ] Publish to https://hex.pm.
+You can see README.md in `line_ex_webhook` or `examples` about how to use it.
