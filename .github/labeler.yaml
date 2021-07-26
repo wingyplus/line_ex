@@ -1,0 +1,13 @@
+area/line_ex_webhook:
+  - line_ex_webhook/**
+  - .github/workflows/line-ex-webhook.yaml
+
+area/examples:
+  - examples/**
+
+area/ci:
+  - .github/**
+
+area/documentation:
+  - README.md
+  - "**/README.md"
