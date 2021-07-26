@@ -1,5 +1,5 @@
 name: line-ex-webhook
-on: 
+on:
   push:
     branches:
       - main
