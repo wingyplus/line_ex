@@ -3,7 +3,7 @@ defmodule LineEx.WebhookTest do
   alias Plug.Conn
   import LineEx.Factory
 
-  defmodule UpdateStateHandlerTest do
+  defmodule UpdateStateWebhook do
     use LineEx.Webhook
 
     def start_link(args, opts \\ []) do
@@ -21,7 +21,7 @@ defmodule LineEx.WebhookTest do
     end
   end
 
-  defmodule SimpleHandlerTest do
+  defmodule SimpleWebhook do
     use LineEx.Webhook
 
     def start_link(args, opts \\ []) do
@@ -36,6 +36,22 @@ defmodule LineEx.WebhookTest do
     @impl true
     def handle_event(%{"events" => [event]}, state) when is_map(state) do
       {:reply, event["replyToken"], [%{type: "text", text: "Hello"}], state}
+    end
+  end
+
+  defmodule NoReplyWebhook do
+    use LineEx.Webhook
+
+    def start_link(args, opts \\ []) do
+      LineEx.Webhook.start_link(__MODULE__, args, opts)
+    end
+
+    @impl true
+    def init(_opts), do: {:ok, %{}}
+
+    @impl true
+    def handle_event(_event, state) do
+      {:noreply, state}
     end
   end
 
@@ -62,7 +78,7 @@ defmodule LineEx.WebhookTest do
       akey: :value
     ]
 
-    webhook = start_supervised!({UpdateStateHandlerTest, args})
+    webhook = start_supervised!({UpdateStateWebhook, args})
 
     LineEx.Webhook.handle_event(webhook, build(:message_event))
 
@@ -88,7 +104,7 @@ defmodule LineEx.WebhookTest do
       akey: :value
     ]
 
-    webhook = start_supervised!({SimpleHandlerTest, args})
+    webhook = start_supervised!({SimpleWebhook, args})
 
     LineEx.Webhook.handle_event(webhook, build(:message_event))
     # Wait handle cast to be done.
@@ -101,6 +117,20 @@ defmodule LineEx.WebhookTest do
                       "replyToken" => "nHuyWiB7yP5Zw52FIkcQobQuGDXCTA",
                       "messages" => [%{"type" => "text", "text" => "Hello"}]
                     }}
+  end
+
+  test "handle_event/2 no sent reply", %{bypass: bypass, channel_access_token: token} do
+    args = [
+      channel_access_token: token,
+      line_api_url: line_api_url(bypass),
+      akey: :value
+    ]
+
+    webhook = start_supervised!({NoReplyWebhook, args})
+
+    LineEx.Webhook.handle_event(webhook, build(:message_event))
+    # Wait handle cast to be done.
+    _ = :sys.get_state(webhook)
   end
 
   defp line_api_url(bypass), do: "http://localhost:#{bypass.port}"
