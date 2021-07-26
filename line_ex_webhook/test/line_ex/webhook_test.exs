@@ -1,6 +1,7 @@
 defmodule LineEx.WebhookTest do
   use ExUnit.Case, async: true
   alias Plug.Conn
+  import LineEx.Factory
 
   defmodule UpdateStateHandlerTest do
     use LineEx.Webhook
@@ -43,13 +44,20 @@ defmodule LineEx.WebhookTest do
     %{bypass: bypass}
   end
 
-  test "handle_event/2 update new state after send to handler", %{bypass: bypass} do
+  setup do
+    %{channel_access_token: build(:valid_channel_access_token)}
+  end
+
+  test "handle_event/2 update new state after send to handler", %{
+    bypass: bypass,
+    channel_access_token: token
+  } do
     Bypass.expect_once(bypass, "POST", "/v2/bot/message/reply", fn conn ->
       Conn.resp(conn, 200, "{}")
     end)
 
     args = [
-      channel_access_token: "<channel_access_token>",
+      channel_access_token: token,
       line_api_url: line_api_url(bypass),
       akey: :value
     ]
@@ -61,7 +69,10 @@ defmodule LineEx.WebhookTest do
     assert %{state: %{akey: :value}} = :sys.get_state(webhook)
   end
 
-  test "handle_event/2 send reply message to line api", %{bypass: bypass} do
+  test "handle_event/2 send reply message to line api", %{
+    bypass: bypass,
+    channel_access_token: token
+  } do
     self = self()
 
     Bypass.expect_once(bypass, "POST", "/v2/bot/message/reply", fn conn ->
@@ -72,7 +83,7 @@ defmodule LineEx.WebhookTest do
     end)
 
     args = [
-      channel_access_token: "<channel_access_token>",
+      channel_access_token: token,
       line_api_url: line_api_url(bypass),
       akey: :value
     ]
@@ -83,7 +94,7 @@ defmodule LineEx.WebhookTest do
     # Wait handle cast to be done.
     _ = :sys.get_state(webhook)
 
-    assert_receive {:authorization, ["Bearer <channel_access_token>"]}
+    assert_receive {:authorization, ["Bearer " <> ^token]}
 
     assert_receive {:request_body,
                     %{
@@ -93,27 +104,4 @@ defmodule LineEx.WebhookTest do
   end
 
   defp line_api_url(bypass), do: "http://localhost:#{bypass.port}"
-
-  defp build(:message_event) do
-    %{
-      "destination" => "xxxxxxxxxx",
-      "events" => [
-        %{
-          "replyToken" => "nHuyWiB7yP5Zw52FIkcQobQuGDXCTA",
-          "type" => "message",
-          "mode" => "active",
-          "timestamp" => 1_462_629_479_859,
-          "source" => %{
-            "type" => "user",
-            "userId" => "U4af4980629..."
-          },
-          "message" => %{
-            "id" => "325708",
-            "type" => "text",
-            "text" => "Hello, world!"
-          }
-        }
-      ]
-    }
-  end
 end
