@@ -18,8 +18,8 @@ defmodule LineEx.Webhook.Plug do
   @impl true
   def call(%{method: "POST"} = conn, opts) do
     case LineEx.Webhook.Signature.verify(conn, opts.channel_secret) do
-      {:ok, body, conn} ->
-        LineEx.Webhook.handle_event(opts.webhook, Jason.decode!(body))
+      {:ok, conn} ->
+        LineEx.Webhook.handle_event(opts.webhook, conn.body_params)
 
         conn
         |> send_resp(200, "OK")

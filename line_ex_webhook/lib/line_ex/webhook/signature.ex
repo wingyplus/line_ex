@@ -13,14 +13,12 @@ defmodule LineEx.Webhook.Signature do
   Returns `:ok` with raw request body and plug connection. Or `:invalid_signature` when request 
   doesn't match with `channel_secret`.
   """
-  @spec verify(Plug.Conn.t(), String.t()) :: {:ok, binary(), Plug.Conn.t()} | :invalid_signature
+  @spec verify(Plug.Conn.t(), String.t()) :: {:ok, Plug.Conn.t()} | :invalid_signature
   def verify(conn, channel_secret) when is_binary(channel_secret) do
     signature = get_req_header(conn, "x-line-signature") |> List.first()
 
-    with {:ok, body, conn} <- read_body(conn),
-         :ok <- verify(channel_secret, signature, body) do
-      {:ok, body, conn}
-    else
+    case verify(channel_secret, signature, conn.private[:raw_body]) do
+      :ok -> {:ok, conn}
       _ -> :invalid_signature
     end
   end
