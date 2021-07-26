@@ -7,7 +7,7 @@ defmodule LineEx.Webhook.MixProject do
     [
       app: :line_ex_webhook,
       version: @version,
-      elixir: "~> 1.12",
+      elixir: "~> 1.10",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
       deps: deps()
