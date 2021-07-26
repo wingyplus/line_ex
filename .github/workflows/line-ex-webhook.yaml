@@ -6,6 +6,10 @@ on:
   pull_request:
     branches:
       - main
+    paths:
+      - ".github/workflows/line-ex-webhook.yaml"
+      - "line_ex_webhook/**"
+      - "!line_ex_webhook/README.md"
 defaults:
   run:
     working-directory: line_ex_webhook
