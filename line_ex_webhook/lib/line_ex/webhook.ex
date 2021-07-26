@@ -1,5 +1,119 @@
 defmodule LineEx.Webhook do
-  @moduledoc false
+  @moduledoc """
+  A behaviour for implementing LINE webhook. When `LineEx.Webhook.Plug`
+  receive an event, a plug module will verify the request and forward 
+  event to the webhook.
+
+  ## Example
+
+  Let's build a echo webhook that reply a message that user sent. We would
+  create a module and use `LineEx.Webhook` behaviour:
+
+      defmodule Echo.Webhook do
+        use LineEx.Webhook
+
+        ...
+      end
+
+  After use `LineEx.Webhook`. The module must implements 3 functions, the
+  first one is `start_link/2` to starting a webhook process:
+
+      defmodule Echo.Webhook do
+        use LineEx.Webhook
+
+        def start_link(args, opts \\ []) do
+          LineEx.Webhook.start_link(__MODULE__, args, opts)
+        end
+      end
+
+
+  The second one is `init/1`, `LineEx.Webhook` will invoke this function when initialize 
+  a process. The `init/1` callback must returns `{:ok, state}` or `{:stop, reason}`
+  if it found an error, such as initialize argument is not valid:
+
+      defmodule Echo.Webhook do
+        use LineEx.Webhook
+
+        def start_link(args, opts \\ []) do
+          LineEx.Webhook.start_link(__MODULE__, args, opts)
+        end
+
+        @impl true
+        def init(args) do
+          # Processing arguments here.
+          {:ok, %{}}
+        end
+      end
+
+  And finally, the `handle_event/2` for handling LINE webhook event, the first argument is
+  an event that LINE sent to us and the second is the state of the webhook process:
+
+      defmodule Echo.Webhook do
+        use LineEx.Webhook
+
+        def start_link(args, opts \\ []) do
+          LineEx.Webhook.start_link(__MODULE__, args, opts)
+        end
+
+        @impl true
+        def init(args) do
+          # Processing arguments here.
+          {:ok, %{}}
+        end
+
+        @impl true
+        def handle_event(event, state) do
+          ...
+        end
+      end
+
+    the result from this callback must be one of: 
+
+    * `{:reply, reply_token, messages, state}` - it'll tell the process to reply a `messages` to
+      the user with a `reply_token`. And `state` of process. With this way, you can a lot of things
+      with the webhook, such as store chat state per user to do stateful chat.
+
+    * `{:noreply, state}` - do not reply any messages to the user.
+
+    So our echo webhook will be like this:
+
+      defmodule Echo.Webhook do
+        use LineEx.Webhook
+
+        def start_link(args, opts \\ []) do
+          LineEx.Webhook.start_link(__MODULE__, args, opts)
+        end
+
+        @impl true
+        def init(args) do
+          # Processing arguments here.
+          {:ok, %{}}
+        end
+
+        @impl true
+        def handle_event(%{"events" => [event]}, state) do
+          {:reply, 
+           event["replyToken"], 
+           [%{type: "text", text: event["message"]}], 
+           state}
+        end
+      end
+
+  The `handle_event/2` will reply a text that user sent to the webhook. Note that we
+  assume the user send text message to us. If you want to handle more kind of event, 
+  you can use `event["type"]` to check type of event which's follow the (LINE Webhook Event Objects)[https://developers.line.biz/en/reference/messaging-api/#webhook-event-objects]
+  guideline.
+
+  The final step, put a webhook module to the supervisor children:
+
+      children = [
+        {Echo.Webhook, channel_access_token: "..."}
+        ...
+      ]
+
+  In the process arguments in `children`, set the `channel_access_token` to it to uses for reply
+  a message.
+  """
 
   use GenServer
 

@@ -26,7 +26,8 @@ defmodule LineEx.Webhook.MixProject do
       {:jason, "~> 1.2"},
       {:certifi, "~> 2.7"},
       {:plug, "~> 1.0"},
-      {:bypass, "~> 2.1", only: :test}
+      {:bypass, "~> 2.1", only: :test},
+      {:ex_doc, "~> 0.24", only: :dev, runtime: false}
     ]
   end
 end
