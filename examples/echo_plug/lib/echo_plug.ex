@@ -7,7 +7,7 @@ defmodule EchoPlug do
 
   plug Plug.Parsers,
     parsers: [:json],
-    body_reader: {LineEx.Webhook.BodyReader, :read_body, [[for_path: ["webhook"]]]},
+    body_reader: {LineEx.Webhook.BodyReader, :read_body, []},
     json_decoder: Jason
 
   plug :match
