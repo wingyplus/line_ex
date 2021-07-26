@@ -6,9 +6,11 @@ on:
   pull_request:
     branches:
       - main
-
+defaults:
+  run:
+    working-directory: line_ex_webhook
 jobs:
-  line-ex-webhook-test:
+  test:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
@@ -16,7 +18,5 @@ jobs:
         with:
           otp-version: 24.0.4
           elixir-version: 1.12.2
-      - working-directory: line_ex_webhook
-        run: mix deps.get
-      - working-directory: line_ex_webhook
-        run: mix test
+      - run: mix deps.get
+      - run: mix test
