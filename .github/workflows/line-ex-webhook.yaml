@@ -34,4 +34,4 @@ jobs:
           otp-version: 24.0.4
           elixir-version: 1.12.2
       - run: mix deps.get
-      - run: mix format --checked
+      - run: mix format --check-formatted
