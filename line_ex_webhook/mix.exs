@@ -1,10 +1,12 @@
 defmodule LineEx.Webhook.MixProject do
   use Mix.Project
 
+  @version "0.1.0"
+
   def project do
     [
       app: :line_ex_webhook,
-      version: "0.1.0",
+      version: @version,
       elixir: "~> 1.12",
       elixirc_paths: elixirc_paths(Mix.env()),
       start_permanent: Mix.env() == :prod,
