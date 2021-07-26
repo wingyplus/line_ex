@@ -1,0 +1,22 @@
+name: line-ex-webhook
+on: 
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  line-ex-webhook-test:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: 24.0.4
+          elixir-version: 1.12.2
+      - working-directory: line_ex_webhook
+        run: mix deps.get
+      - working-directory: line_ex_webhook
+        run: mix test
