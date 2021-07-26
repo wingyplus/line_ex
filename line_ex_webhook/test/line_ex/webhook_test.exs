@@ -62,11 +62,12 @@ defmodule LineEx.WebhookTest do
   end
 
   test "handle_event/2 send reply message to line api", %{bypass: bypass} do
+    self = self()
+
     Bypass.expect_once(bypass, "POST", "/v2/bot/message/reply", fn conn ->
-      assert Conn.get_req_header(conn, "authorization") == ["Bearer <channel_access_token>"]
+      send(self, {:authorization, Conn.get_req_header(conn, "authorization")})
       {:ok, req_body, conn} = Conn.read_body(conn)
-      payload = Jason.decode!(req_body)
-      assert payload["replyToken"] == "nHuyWiB7yP5Zw52FIkcQobQuGDXCTA"
+      send(self, {:request_body, Jason.decode!(req_body)})
       Conn.resp(conn, 200, "{}")
     end)
 
@@ -81,11 +82,19 @@ defmodule LineEx.WebhookTest do
     LineEx.Webhook.handle_event(webhook, build(:message_event))
     # Wait handle cast to be done.
     _ = :sys.get_state(webhook)
+
+    assert_receive {:authorization, ["Bearer <channel_access_token>"]}
+
+    assert_receive {:request_body,
+                    %{
+                      "replyToken" => "nHuyWiB7yP5Zw52FIkcQobQuGDXCTA",
+                      "messages" => [%{"type" => "text", "text" => "Hello"}]
+                    }}
   end
 
   defp line_api_url(bypass), do: "http://localhost:#{bypass.port}"
 
-  defp build(:message_event, attr \\ %{}) do
+  defp build(:message_event) do
     %{
       "destination" => "xxxxxxxxxx",
       "events" => [
