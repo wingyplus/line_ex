@@ -3,9 +3,9 @@
 **NOTE:** The library is under development. It can have breaking changes during develop. Please
 use with cautions.
 
-`LineEx.Webhook` provides mechanism to handle webhook event, such as verify signature, reply the message.
+`LineEx.Webhook` provides mechanism to handle webhook event, such as verify signature, reply the message, etc.
 
-## Main goal
+## Features
 
 * Provides mechanism to verify request before entering webhook. User don't to handle on 
   their own.
