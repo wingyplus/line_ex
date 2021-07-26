@@ -12,7 +12,7 @@ defmodule LineEx.Webhook.HttpcClient do
       :httpc.request(
         :post,
         {url, headers, String.to_charlist("application/json"), Jason.encode!(payload)},
-        [ssl: [verify: :verify_peer, cacerts: :certifi.cacerts()]],
+        [ssl: [verify: :verify_peer, cacertfile: CAStore.file_path()]],
         sync: true,
         body_format: :binary
       )

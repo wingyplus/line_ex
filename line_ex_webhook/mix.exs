@@ -24,7 +24,7 @@ defmodule LineEx.Webhook.MixProject do
   defp deps do
     [
       {:jason, "~> 1.2"},
-      {:certifi, "~> 2.7"},
+      {:castore, "~> 0.1.0"},
       {:plug, "~> 1.0"},
       {:bypass, "~> 2.1", only: :test},
       {:ex_doc, "~> 0.24", only: :dev, runtime: false}
