@@ -117,6 +117,8 @@ defmodule LineEx.Webhook do
 
   use GenServer
 
+  alias LineEx.MessagingApi.Message
+
   # TODO: add type spec each event.
 
   @type message_event() :: map()
@@ -159,7 +161,6 @@ defmodule LineEx.Webhook do
           mod: module(),
           state: term(),
           channel_access_token: String.t(),
-          http_client: LineEx.Webhook.HttpClient,
           line_api_url: String.t()
         }
 
@@ -167,7 +168,6 @@ defmodule LineEx.Webhook do
     :mod,
     :state,
     :channel_access_token,
-    :http_client,
     :line_api_url
   ]
 
@@ -207,7 +207,6 @@ defmodule LineEx.Webhook do
            mod: mod,
            state: state,
            channel_access_token: opts[:channel_access_token],
-           http_client: opts[:http_client] || LineEx.Webhook.HttpcClient,
            line_api_url: opts[:line_api_url] || "https://api.line.me"
          }}
 
@@ -218,19 +217,14 @@ defmodule LineEx.Webhook do
 
   @impl true
   def handle_cast({:"$webhook_event", event}, webhook) do
-    channel_access_token = webhook.channel_access_token
-    http_client = webhook.http_client
-    endpoint = "#{webhook.line_api_url}/v2/bot/message/reply"
-
     new_state =
       case webhook.mod.handle_event(event, webhook.state) do
         {:reply, reply_token, messages, new_state} ->
-          payload = %{
-            replyToken: reply_token,
-            messages: messages
-          }
+          {:ok, %{}} =
+            webhook.channel_access_token
+            |> Message.client(timeout: 10_000, api_endpoint: webhook.line_api_url)
+            |> Message.request(Message.reply_message(reply_token, messages))
 
-          {200, _, _} = http_client.post(endpoint, channel_access_token, payload)
           new_state
 
         {:noreply, new_state} ->

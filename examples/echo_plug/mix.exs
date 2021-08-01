@@ -21,7 +21,8 @@ defmodule EchoPlug.MixProject do
   defp deps do
     [
       {:plug_cowboy, "~> 2.0"},
-      {:line_ex_webhook, "~> 0.1.0", path: "../../line_ex_webhook"},
+      {:finch, "~> 0.8"},
+      {:line_ex_webhook, "~> 0.1.0-dev", path: "../../line_ex_webhook"},
     ]
   end
 end

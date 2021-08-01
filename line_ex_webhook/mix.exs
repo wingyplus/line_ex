@@ -1,7 +1,7 @@
 defmodule LineEx.Webhook.MixProject do
   use Mix.Project
 
-  @version "0.1.0"
+  @version "0.1.0-dev"
 
   def project do
     [
@@ -25,9 +25,10 @@ defmodule LineEx.Webhook.MixProject do
 
   defp deps do
     [
-      {:jason, "~> 1.2"},
-      {:castore, "~> 0.1.0"},
+      # TODO: remove it after tesla release a new version.
+      {:telemetry, "~> 0.4"},
       {:plug, "~> 1.0"},
+      {:line_ex_messaging_api, "~> 0.1.0-dev", path: "../line_ex_messaging_api"},
       {:bypass, "~> 2.1", only: :test},
       {:ex_doc, "~> 0.24", only: :dev, runtime: false}
     ]

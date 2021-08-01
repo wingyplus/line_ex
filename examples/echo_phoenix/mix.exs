@@ -31,7 +31,8 @@ defmodule EchoPhoenix.MixProject do
       {:telemetry_poller, "~> 0.4"},
       {:jason, "~> 1.0"},
       {:plug_cowboy, "~> 2.0"},
-      {:line_ex_webhook, "~> 0.1.0", path: "../../line_ex_webhook"}
+      {:finch, "~> 0.8"},
+      {:line_ex_webhook, "~> 0.1.0-dev", path: "../../line_ex_webhook"}
     ]
   end
 

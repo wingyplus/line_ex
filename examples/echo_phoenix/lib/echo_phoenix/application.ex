@@ -9,6 +9,7 @@ defmodule EchoPhoenix.Application do
     channel_access_token = System.get_env("LINE_CHANNEL_ACCESS_TOKEN")
 
     children = [
+      {Finch, name: EchoPhoenix.Finch},
       {EchoPhoenix.Webhook,
        channel_access_token: channel_access_token, name: EchoPhoenix.Webhook},
       # Start the Telemetry supervisor

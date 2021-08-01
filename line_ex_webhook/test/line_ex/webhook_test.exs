@@ -69,7 +69,9 @@ defmodule LineEx.WebhookTest do
     channel_access_token: token
   } do
     Bypass.expect_once(bypass, "POST", "/v2/bot/message/reply", fn conn ->
-      Conn.resp(conn, 200, "{}")
+      conn
+      |> Conn.put_resp_header("content-type", "application/json")
+      |> Conn.resp(200, "{}")
     end)
 
     args = [
@@ -95,7 +97,9 @@ defmodule LineEx.WebhookTest do
       send(self, {:authorization, Conn.get_req_header(conn, "authorization")})
       {:ok, req_body, conn} = Conn.read_body(conn)
       send(self, {:request_body, Jason.decode!(req_body)})
-      Conn.resp(conn, 200, "{}")
+      conn
+      |> Conn.put_resp_header("content-type", "application/json")
+      |> Conn.resp(200, "{}")
     end)
 
     args = [

@@ -8,6 +8,7 @@ defmodule EchoPlug.Application do
     channel_access_token = System.get_env("LINE_CHANNEL_ACCESS_TOKEN")
 
     children = [
+      {Finch, name: EchoPlug.Finch},
       {EchoPlug.Webhook, channel_access_token: channel_access_token, name: EchoPlug.Webhook},
       {Plug.Cowboy, scheme: :http, plug: EchoPlug, options: [port: 5000]}
     ]
