@@ -21,7 +21,7 @@ defmodule LineEx.MessagingApi.Message do
       method: :post,
       url: "/v2/bot/message/reply",
       body: %{
-        replyTo: reply_token,
+        replyToken: reply_token,
         messages: messages
       }
     ]
