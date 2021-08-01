@@ -1,0 +1,37 @@
+name: line-ex-messaging-api
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+    paths:
+      - ".github/workflows/line-ex-messaging-api.yaml"
+      - "line_ex_messaging_api/**"
+      - "!line_ex_messaging_api/README.md"
+defaults:
+  run:
+    working-directory: line_ex_messaging_api
+jobs:
+  # test:
+  #   runs-on: ubuntu-latest
+  #   steps:
+  #     - uses: actions/checkout@v2
+  #     - uses: erlef/setup-beam@v1
+  #       with:
+  #         otp-version: 24.0.4
+  #         elixir-version: 1.12.2
+  #     - run: mix deps.get
+  #     - run: mix test
+
+  format-checked:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - uses: erlef/setup-beam@v1
+        with:
+          otp-version: 24.0.4
+          elixir-version: 1.12.2
+      - run: mix deps.get
+      - run: mix format --check-formatted

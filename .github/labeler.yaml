@@ -2,6 +2,10 @@ area/line_ex_webhook:
   - line_ex_webhook/**
   - .github/workflows/line-ex-webhook.yaml
 
+area/line_ex_messaging_api:
+  - line_ex_messaging_api/**
+  - .github/workflows/line-ex-messaging-api.yaml
+
 area/examples:
   - examples/**
 
