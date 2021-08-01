@@ -97,6 +97,7 @@ defmodule LineEx.WebhookTest do
       send(self, {:authorization, Conn.get_req_header(conn, "authorization")})
       {:ok, req_body, conn} = Conn.read_body(conn)
       send(self, {:request_body, Jason.decode!(req_body)})
+
       conn
       |> Conn.put_resp_header("content-type", "application/json")
       |> Conn.resp(200, "{}")
