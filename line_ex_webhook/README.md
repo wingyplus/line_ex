@@ -7,7 +7,7 @@ use with cautions.
 
 ## Features
 
-* Provides mechanism to verify request before entering webhook. User don't to handle on 
+* Provides mechanism to verify request before entering webhook. User don't to handle on
   their own.
 * Provides user-friendly api to write webhook event handler. User don't need to worry about
   how they reply.
@@ -20,7 +20,7 @@ You needs to add dependency to your project:
 ```elixir
 def deps do
   [
-    {:line_ex_webhook, "~> 0.1.0", github: "github.com/wingyplus/line_ex", sparse: "line_ex_webhook"},
+    {:line_ex_webhook, "~> 0.1.0-dev", github: "github.com/wingyplus/line_ex", sparse: "line_ex_webhook"},
   ]
 end
 ```

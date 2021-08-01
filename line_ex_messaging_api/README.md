@@ -1,21 +1,15 @@
 # LineEx.MessagingApi
 
-**TODO: Add description**
+Client library to interact with LINE Messaging API.
 
 ## Installation
 
-If [available in Hex](https://hex.pm/docs/publish), the package can be installed
-by adding `line_ex_messaging_api` to your list of dependencies in `mix.exs`:
+Add dependency to deps block:
 
 ```elixir
 def deps do
   [
-    {:line_ex_messaging_api, "~> 0.1.0"}
+    {:line_ex_messaging_api, "~> 0.1.0-dev", github: "wingyplus/line_ex", sparse: "line_ex_messaging_api"}
   ]
 end
 ```
-
-Documentation can be generated with [ExDoc](https://github.com/elixir-lang/ex_doc)
-and published on [HexDocs](https://hexdocs.pm). Once published, the docs can
-be found at [https://hexdocs.pm/line_ex_messaging_api](https://hexdocs.pm/line_ex_messaging_api).
-
