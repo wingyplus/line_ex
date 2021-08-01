@@ -1,0 +1,1 @@
+alias LineEx.MessagingApi.Message
