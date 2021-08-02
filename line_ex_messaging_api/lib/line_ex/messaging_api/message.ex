@@ -10,8 +10,6 @@ defmodule LineEx.MessagingApi.Message do
   @type channel_access_token() :: String.t()
   @type client() :: Tesla.Client.t()
 
-  @line_api_endpoint "https://api.line.me"
-
   @doc """
   Create a request to send reply message.
   """
@@ -142,6 +140,7 @@ defmodule LineEx.MessagingApi.Message do
   @doc """
   Sending a `request` to LINE Server.
   """
+  @deprecated "Use LineEx.MessagingApi.request/3 instead."
   @spec request(client(), request(), keyword()) :: {:ok, term()} | {:error, term()}
   def request(client, request, opts \\ []) do
     client
@@ -172,12 +171,12 @@ defmodule LineEx.MessagingApi.Message do
   @spec client(channel_access_token(), [option]) :: client()
         when option: {:api_endpoint, String.t()} | {:timeout, non_neg_integer()}
   def client(channel_access_token, opts \\ []) do
-    middleware = [
-      {Tesla.Middleware.BaseUrl, Keyword.get(opts, :api_endpoint, @line_api_endpoint)},
-      {Tesla.Middleware.Headers, [{"authorization", "Bearer " <> channel_access_token}]},
-      {Tesla.Middleware.Timeout, timeout: Keyword.get(opts, :timeout, 1_000)},
-      Tesla.Middleware.JSON
-    ]
+    middleware =
+      LineEx.MessagingApi.default_middleware(opts) ++
+        [
+          LineEx.MessagingApi.authentication_middleware(channel_access_token),
+          Tesla.Middleware.JSON
+        ]
 
     Tesla.client(middleware)
   end
