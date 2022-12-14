@@ -25,8 +25,7 @@ defmodule LineEx.Webhook.MixProject do
 
   defp deps do
     [
-      # TODO: remove it after tesla release a new version.
-      {:telemetry, "~> 0.4"},
+      {:telemetry, "~> 1.0"},
       {:plug, "~> 1.0"},
       {:line_ex_messaging_api, "~> 0.1.0-dev", path: "../line_ex_messaging_api"},
       {:bypass, "~> 2.1", only: :test},
