@@ -23,7 +23,7 @@ defmodule LineEx.MessagingApi.MixProject do
   # Run "mix help deps" to learn about dependencies.
   defp deps do
     [
-      {:tesla, "~> 1.4"},
+      {:tesla, github: "elixir-tesla/tesla"},
       {:jason, "~> 1.2"}
     ]
   end
