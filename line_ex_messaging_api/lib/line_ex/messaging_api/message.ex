@@ -138,6 +138,16 @@ defmodule LineEx.MessagingApi.Message do
   end
 
   @doc """
+  Get images, videos, and files sent by users.
+  """
+  def get_content(message_id) do
+    [
+      method: :get,
+      url: "/v2/bot/message/#{message_id}/content"
+    ]
+  end
+
+  @doc """
   Sending a `request` to LINE Server.
   """
   @deprecated "Use LineEx.MessagingApi.request/3 instead."

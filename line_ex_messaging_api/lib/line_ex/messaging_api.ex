@@ -37,6 +37,7 @@ defmodule LineEx.MessagingApi do
   def request(client, request, opts \\ []) do
     client
     |> Tesla.request(Keyword.put(request, :opts, opts))
+    |> dbg()
     |> case do
       {:ok, %Tesla.Env{body: response, status: 200}} ->
         {:ok, response}
