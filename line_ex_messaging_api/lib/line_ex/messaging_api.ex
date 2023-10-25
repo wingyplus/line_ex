@@ -32,15 +32,27 @@ defmodule LineEx.MessagingApi do
 
   @doc """
   Sending a `request` to LINE Server.
+
+  ## Options
+
+  * `:return_headers` - Returns HTTP request header when request it successfully.
   """
-  @spec request(client(), request(), keyword()) :: {:ok, term()} | {:error, term()}
+  @spec request(client(), request(), keyword()) ::
+          {:ok, term()} | {:ok, term(), [header]} | {:error, term()}
+        when header: {String.t(), String.t()}
   def request(client, request, opts \\ []) do
+    return_headers? = opts[:return_headers] || false
+
     client
     |> Tesla.request(Keyword.put(request, :opts, opts))
     |> dbg()
     |> case do
-      {:ok, %Tesla.Env{body: response, status: 200}} ->
-        {:ok, response}
+      {:ok, %Tesla.Env{body: response, status: 200, headers: headers}} ->
+        if return_headers? do
+          {:ok, response, headers}
+        else
+          {:ok, response}
+        end
 
       {:ok, %Tesla.Env{body: response, status: status}} when status in [400, 404, 500] ->
         {:error, response}
