@@ -20,7 +20,7 @@ defmodule LineEx.MessagingApi do
   @spec default_middleware([option]) :: client()
         when option: {:api_endpoint, String.t()} | {:timeout, non_neg_integer()}
   def default_middleware(opts \\ []) do
-    middleware = [
+    [
       {Tesla.Middleware.BaseUrl, Keyword.get(opts, :api_endpoint, @line_api_endpoint)},
       {Tesla.Middleware.Timeout, timeout: Keyword.get(opts, :timeout, 1_000)}
     ]
