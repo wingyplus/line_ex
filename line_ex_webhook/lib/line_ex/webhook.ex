@@ -67,15 +67,15 @@ defmodule LineEx.Webhook do
         end
       end
 
-    the result from this callback must be one of:
+  the result from this callback must be one of:
 
-    * `{:reply, reply_token, messages, state}` - it'll tell the process to reply a `messages` to
-      the user with a `reply_token`. And `state` of process. With this way, you can a lot of things
-      with the webhook, such as store chat state per user to do stateful chat.
+  * `{:reply, reply_token, messages, state}` - it'll tell the process to reply a `messages` to
+    the user with a `reply_token`. And `state` of process. With this way, you can a lot of things
+    with the webhook, such as store chat state per user to do stateful chat.
 
-    * `{:noreply, state}` - do not reply any messages to the user.
+  * `{:noreply, state}` - do not reply any messages to the user.
 
-    So our echo webhook will be like this:
+  So our echo webhook will be like this:
 
       defmodule Echo.Webhook do
         use LineEx.Webhook
@@ -200,7 +200,7 @@ defmodule LineEx.Webhook do
   def init(opts) do
     mod = opts[:mod]
 
-    case mod.init(opts[:init_args]) do
+    case mod.init(opts[:init_args] ++ Keyword.take(opts, [:channel_access_token])) do
       {:ok, state} ->
         {:ok,
          %__MODULE__{
