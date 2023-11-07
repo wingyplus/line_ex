@@ -222,6 +222,7 @@ defmodule LineEx.Webhook do
         {:reply, reply_token, messages, new_state} ->
           {:ok, %{}} =
             webhook.channel_access_token
+            |> resolve_value()
             |> Message.client(timeout: 10_000, api_endpoint: webhook.line_api_url)
             |> Message.request(Message.reply_message(reply_token, messages))
 
@@ -233,6 +234,9 @@ defmodule LineEx.Webhook do
 
     {:noreply, %{webhook | state: new_state}}
   end
+
+  def resolve_value({:system, env}), do: System.get_env(env)
+  def resolve_value(value), do: value
 
   ## Behaviour
 
